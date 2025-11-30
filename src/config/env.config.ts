@@ -14,7 +14,7 @@ const loadEnv = (): IEnv => {
 
   return envs.reduce((acc, env) => ({
       ...acc,
-      [env.toLowerCase()]: process.env[env],
+      [env.toLowerCase()]: process.env[env] as string,
     }), {} as IEnv);
 };
 
