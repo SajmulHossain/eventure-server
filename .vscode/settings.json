@@ -1,0 +1,8 @@
+{
+    "github.copilot.chat.alternateGptPrompt.enabled": true,
+    "github.copilot.chat.anthropic.thinking.enabled": true,
+    "github.copilot.chat.anthropic.tools.websearch.enabled": true,
+    "json.schemas": [
+        
+    ]
+}
