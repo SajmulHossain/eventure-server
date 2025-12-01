@@ -5,3 +5,9 @@ export interface IUser {
   interests: string[];
   location: string;
 }
+
+export enum UserRoles {
+  USER="USER",
+  HOST="HOST",
+  ADMIN="ADMIN"
+}
