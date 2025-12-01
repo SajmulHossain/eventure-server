@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "bun --watch run ./src/server",
     "build": "tsc",
-    "deploy": "tsc && vercel --prod"
+    "deploy": "tsc && vercel --prod",
+    "lint": "bunx eslint ./src"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

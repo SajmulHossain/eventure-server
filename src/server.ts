@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import mongoose from "mongoose";
 import app from "./app";
 import { connectDB, disconnectDB } from "./config/db.config";

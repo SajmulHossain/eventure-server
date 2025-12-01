@@ -1,6 +1,6 @@
 interface IEnv {
   port: string;
-  db_uri: String;
+  db_uri: string;
 }
 
 const envs = ["PORT", "DB_URI"];

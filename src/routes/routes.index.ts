@@ -3,10 +3,10 @@ import { UserRoutes } from "src/modules/user/user.route";
 
 const router = Router();
 
-const routes: Array<{
+const routes: {
   path: string;
   route: Router;
-}> = [{
+}[] = [{
     path: "/users",
     route: UserRoutes
 }];
