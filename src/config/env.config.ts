@@ -1,3 +1,7 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 interface IEnv {
   port: string;
   db_uri: string;

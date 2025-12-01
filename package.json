@@ -1,12 +1,11 @@
 {
   "name": "server",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
     "dev": "bun --watch run ./src/server",
-    "build": "tsc",
-    "deploy": "tsc && vercel --prod",
+    "build": "tsc && tsc-alias",
+    "deploy": "bun run build && vercel --prod",
     "lint": "bunx eslint ./src"
   },
   "devDependencies": {
@@ -14,12 +13,14 @@
     "@types/bun": "latest",
     "@types/express": "^5.0.5",
     "eslint": "^9.39.1",
+    "tsc-alias": "^1.8.16",
     "typescript-eslint": "^8.48.0"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "mongoose": "^9.0.0",
     "vercel": "^48.12.0"
