@@ -5,9 +5,10 @@ dotenv.config();
 interface IEnv {
   port: string;
   db_uri: string;
+  node_env: string;
 }
 
-const envs = ["PORT", "DB_URI"];
+const envs = ["PORT", "DB_URI", "NODE_ENV"];
 
 const loadEnv = (): IEnv => {
   envs.forEach((env) => {
