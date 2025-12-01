@@ -1,5 +1,6 @@
 import express from "express";
 import router from "./routes/routes.index";
+import { notFoundHandler } from "@middlewares/not-found";
 
 const app = express();
 
@@ -10,5 +11,7 @@ app.get("/", (_req, res) => {
     message: "Server is running!",
   });
 });
+
+app.use(notFoundHandler);
 
 export default app;
