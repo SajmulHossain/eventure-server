@@ -1,13 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { UserRoles } from "@modules/user/user.interface";
+import { User } from "@modules/user/user.model";
 import passport from "passport";
 import {
-  Strategy as GoogleStrategy,
-  Profile,
-  VerifyCallback,
+    Strategy as GoogleStrategy,
+    Profile,
+    VerifyCallback,
 } from "passport-google-oauth20";
+import { Strategy as LocalStrategy } from 'passport-local';
 import envConfig from "./env.config";
-import { User } from "@modules/user/user.model";
-import { UserRoles } from "@modules/user/user.interface";
+
+passport.use(
+    new LocalStrategy(
+        {
+            usernameField: 'email',
+            passwordField: 'password',
+        },
+        async (email, password, done) => {
+            try {
+                if(!email || !password) {
+                    return done(null, false, { message: 'Email and password are required.' });
+                }
+
+                const user = await User.findOne({ email });
+                if (!user) {
+                    return done(null, false, { message: 'User not exists.' });
+                }
+
+                const isGoogleAuthenticated = user.auths.some(auth => auth.provider === 'google');
+                if (isGoogleAuthenticated) {
+                    return done(null, false, { message: 'Please login using Google.' });
+                }
+                
+                return done(null, user);
+            } catch (error) {
+                return done(error);
+            }
+        }
+    )
+)
 
 passport.use(
   new GoogleStrategy(
