@@ -5,6 +5,7 @@ import router from "./routes/routes.index";
 import expressSession from "express-session";
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+import "@config/passport.config";
 
 const app = express();
 app.use(express.json());
