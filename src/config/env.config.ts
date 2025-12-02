@@ -10,9 +10,27 @@ interface IEnv {
   google_client_secret: string;
   google_callback_url: string;
   bcrypt_salt_rounds: string;
+  frontend_url: string;
+  jwt_access_secret: string;  
+  jwt_refresh_secret: string;
+  jwt_access_expiry: string;
+  jwt_refresh_expiry: string;
 }
 
-const envs = ["PORT", "DB_URI", "NODE_ENV", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_CALLBACK_URL", "BCRYPT_SALT_ROUNDS"];
+const envs = [
+  "PORT",
+  "DB_URI",
+  "NODE_ENV",
+  "GOOGLE_CLIENT_ID",
+  "GOOGLE_CLIENT_SECRET",
+  "GOOGLE_CALLBACK_URL",
+  "BCRYPT_SALT_ROUNDS",
+  "FRONTEND_URL",
+  "JWT_ACCESS_SECRET",
+  "JWT_REFRESH_SECRET",
+  "JWT_ACCESS_EXPIRY",
+  "JWT_REFRESH_EXPIRY",
+];
 
 const loadEnv = (): IEnv => {
   envs.forEach((env) => {

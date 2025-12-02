@@ -1,11 +1,11 @@
+import "@config/passport.config";
 import { globalErrorHandler } from "@middlewares/globalErrorHandler";
 import { notFoundHandler } from "@middlewares/not-found";
+import cookieParser from 'cookie-parser';
 import express from "express";
-import router from "./routes/routes.index";
 import expressSession from "express-session";
 import passport from 'passport';
-import cookieParser from 'cookie-parser';
-import "@config/passport.config";
+import router from "./routes/routes.index";
 
 const app = express();
 app.use(express.json());
