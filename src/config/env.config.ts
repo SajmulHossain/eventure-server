@@ -6,9 +6,12 @@ interface IEnv {
   port: string;
   db_uri: string;
   node_env: string;
+  google_client_id: string;
+  google_client_secret: string;
+  google_callback_url: string;
 }
 
-const envs = ["PORT", "DB_URI", "NODE_ENV"];
+const envs = ["PORT", "DB_URI", "NODE_ENV", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_CALLBACK_URL"];
 
 const loadEnv = (): IEnv => {
   envs.forEach((env) => {

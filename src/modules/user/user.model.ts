@@ -1,26 +1,52 @@
 import { model, Schema } from "mongoose";
-import type { IUser } from "./user.interface";
+import { UserRoles, type IUser } from "./user.interface";
 
 const userModel = new Schema<IUser>({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   profile_photo: {
-    type: String
+    type: String,
   },
   bio: {
     type: String,
-    required: true
+    required: true,
   },
   interests: {
     type: [String],
-    required: true
+    required: true,
   },
   location: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+  auths: {
+    type: [
+      {
+        provider: {
+          type: String,
+          enum: ["google", "credentials"],
+          required: true,
+        },
+        providerId: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: Object.values(UserRoles),
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+});
 
 export const User = model<IUser>("User", userModel);

@@ -4,6 +4,14 @@ export interface IUser {
   bio: string;
   interests: string[];
   location: string;
+  auths: IAuthProvider[];
+  role: UserRoles;
+  email: string;
+}
+
+export interface IAuthProvider {
+  provider: "google" | "credentials";
+  providerId: string;
 }
 
 export enum UserRoles {
