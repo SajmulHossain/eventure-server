@@ -9,6 +9,7 @@ import {
 } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from 'passport-local';
 import envConfig from "./env.config";
+import { compare } from "bcryptjs";
 
 passport.use(
     new LocalStrategy(
@@ -31,7 +32,13 @@ passport.use(
                 if (isGoogleAuthenticated) {
                     return done(null, false, { message: 'Please login using Google.' });
                 }
-                
+
+                const isPasswordMatched = await compare(password, user?.password);
+
+                if (!isPasswordMatched) {
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+
                 return done(null, user);
             } catch (error) {
                 return done(error);

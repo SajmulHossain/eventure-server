@@ -9,9 +9,10 @@ interface IEnv {
   google_client_id: string;
   google_client_secret: string;
   google_callback_url: string;
+  bcrypt_salt_rounds: string;
 }
 
-const envs = ["PORT", "DB_URI", "NODE_ENV", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_CALLBACK_URL"];
+const envs = ["PORT", "DB_URI", "NODE_ENV", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_CALLBACK_URL", "BCRYPT_SALT_ROUNDS"];
 
 const loadEnv = (): IEnv => {
   envs.forEach((env) => {

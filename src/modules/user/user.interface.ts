@@ -7,6 +7,7 @@ export interface IUser {
   auths: IAuthProvider[];
   role: UserRoles;
   email: string;
+  password: string;
 }
 
 export interface IAuthProvider {
