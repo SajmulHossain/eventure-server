@@ -7,7 +7,7 @@ const routes: {
   path: string;
   route: Router;
 }[] = [{
-    path: "/users",
+    path: "/user",
     route: UserRoutes
 }];
 

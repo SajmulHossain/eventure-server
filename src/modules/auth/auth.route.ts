@@ -13,4 +13,6 @@ router.get("/google/callback", (req: Request, res: Response, next: NextFunction)
     })(req, res, next);
 });
 
+
+
 export const AuthRoutes = router;

@@ -1,6 +1,22 @@
 import { model, Schema } from "mongoose";
 import { UserRoles, type IUser } from "./user.interface";
 
+const authProviderSchema = new Schema<IUser["auths"][0]>(
+  {
+    provider: {
+      type: String,
+      enum: ["google", "credentials"],
+      required: true,
+      default: "credentials",
+    },
+    providerId: {
+      type: String,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
 const userModel = new Schema<IUser>({
   name: {
     type: String,
@@ -22,20 +38,7 @@ const userModel = new Schema<IUser>({
     required: true,
   },
   auths: {
-    type: [
-      {
-        provider: {
-          type: String,
-          enum: ["google", "credentials"],
-          required: true,
-          default: "credentials",
-        },
-        providerId: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    type: [authProviderSchema],
     required: true,
   },
   role: {
@@ -53,6 +56,9 @@ const userModel = new Schema<IUser>({
     type: String,
     required: true,
   },
+}, {
+  timestamps: true,
+  versionKey: false,
 });
 
 export const User = model<IUser>("User", userModel);
