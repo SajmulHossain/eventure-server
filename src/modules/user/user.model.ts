@@ -28,6 +28,7 @@ const userModel = new Schema<IUser>({
           type: String,
           enum: ["google", "credentials"],
           required: true,
+          default: "credentials",
         },
         providerId: {
           type: String,
@@ -41,6 +42,7 @@ const userModel = new Schema<IUser>({
     type: String,
     enum: Object.values(UserRoles),
     required: true,
+    default: UserRoles.USER,
   },
   email: {
     type: String,
