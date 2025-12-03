@@ -6,6 +6,7 @@ import { setCookies } from "@utils/cookies";
 import { sendResponse } from "@utils/sendResponse";
 import { createUserToken } from "@utils/token";
 import passport from "passport";
+import { AuthServices } from "./auth.service";
 
 const googleCallbackController = catchAsync(async (req, res) => {
   let redirectTo = (req.query.state as string) || "";
@@ -33,7 +34,7 @@ const login = catchAsync(async (req, res, next) => {
     }
 
     if (!user) {
-      return next(new ApiError(401, info));
+      return next(info);
     }
 
     const token = createUserToken(user);
@@ -49,7 +50,19 @@ const login = catchAsync(async (req, res, next) => {
   })(req, res, next);
 });
 
+
+const register = catchAsync(async (req, res) => {
+  const data = await AuthServices.register(req.body);
+
+  sendResponse(res, {
+    statusCode: 201,
+    data,
+    message: "User Registered Successfully",
+  });
+});
+
 export const AuthController = {
   googleCallbackController,
   login,
+    register,
 };

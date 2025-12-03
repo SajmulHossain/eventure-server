@@ -2,16 +2,6 @@ import { catchAsync } from "@utils/catchAsync";
 import { UserServices } from "./user.service";
 import { sendResponse } from "@utils/sendResponse";
 
-const register = catchAsync(async (req, res) => {
-  const data = await UserServices.register(req.body);
-
-  sendResponse(res, {
-    statusCode: 201,
-    data,
-    message: "User Registered Successfully",
-  });
-});
-
 const getAllUsers = catchAsync(async (_req, res) => {
   const data = await UserServices.getAllUsers();
 
@@ -48,5 +38,4 @@ export const UserControllers = {
   getAllUsers,
   getSingleUser,
   updateUser,
-  register,
 };

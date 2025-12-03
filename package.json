@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "bun --watch run ./src/server",
+    "dev": "bun --hot run ./src/server",
     "build": "tsc && tsc-alias",
     "deploy": "bun run build && vercel --prod",
     "lint": "bunx eslint ./src"
