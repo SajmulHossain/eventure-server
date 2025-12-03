@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 export interface IEvent {
   name: string;
   description: string;
@@ -7,6 +9,7 @@ export interface IEvent {
   image_url?: string;
   joinning_fee: number;
   status: EventStatus;
+  type: ObjectId
 }
 
 export enum EventStatus {

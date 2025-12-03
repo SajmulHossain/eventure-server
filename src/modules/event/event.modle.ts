@@ -34,6 +34,12 @@ const eventModel = new Schema<IEvent>(
       type: String,
       enum: Object.values(EventStatus),
       required: true,
+      default: EventStatus.OPEN,
+    },
+    type: {
+      type: Schema.Types.ObjectId,
+      ref: "EventType",
+      required: true,
     },
   },
   {
