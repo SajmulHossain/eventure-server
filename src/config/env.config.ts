@@ -15,6 +15,9 @@ interface IEnv {
   jwt_refresh_secret: string;
   jwt_access_expiry: string;
   jwt_refresh_expiry: string;
+  cloudinary_api_key: string;
+  cloudinary_api_secret: string;
+  cloudinary_cloud_name:  string;
 }
 
 const envs = [
@@ -30,6 +33,9 @@ const envs = [
   "JWT_REFRESH_SECRET",
   "JWT_ACCESS_EXPIRY",
   "JWT_REFRESH_EXPIRY",
+  "CLOUDINARY_API_SECRET",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY"
 ];
 
 const loadEnv = (): IEnv => {
