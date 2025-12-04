@@ -6,6 +6,7 @@ import express from "express";
 import expressSession from "express-session";
 import passport from 'passport';
 import router from "./routes/routes.index";
+import envConfig from "@config/env.config";
 
 const app = express();
 app.use(express.json());
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   expressSession({
-    secret: "default_secret",
+    secret: envConfig.express_session_secret,
     resave: false,
     saveUninitialized: true,
   })
@@ -22,12 +23,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser());
+app.set("trust proxy", 1);
 
 app.use("/api/v1", router);
 
 app.get("/", (_req, res) => {
   res.json({
     message: "Server is running!",
+    env: envConfig.cloudinary_cloud_name
   });
 });
 

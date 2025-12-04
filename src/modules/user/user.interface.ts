@@ -1,7 +1,7 @@
 export interface IUser {
   _id?: string;
   name: string;
-  profile_photo?: string;
+  profile_photo: string | File;
   bio: string;
   interests: string[];
   location: string;

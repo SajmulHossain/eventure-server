@@ -1,11 +1,11 @@
 import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { cloudinaryUpload } from "./cloudinary.config";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinaryUpload,
   params: {
-    public_id: (_req, file) => {
+    public_id: (req, file) => {
       const fileName = file.originalname
         .toLowerCase()
         .replace(/\s+/g, "-")
@@ -18,11 +18,10 @@ const storage = new CloudinaryStorage({
         "-" +
         Date.now() +
         "-" +
-        fileName;
-
+        fileName.split("-").slice(0, -1).join("-");
       return uniqueFileName;
     },
   },
 });
 
-export const multerUpload = multer({ storage });
+export const multerUpload = multer({ storage: storage });

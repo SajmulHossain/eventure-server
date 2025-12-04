@@ -52,7 +52,7 @@ const login = catchAsync(async (req, res, next) => {
 
 
 const register = catchAsync(async (req, res) => {
-  const data = await AuthServices.register(req.body);
+  const data = await AuthServices.register({...req.body, profile_photo: req.file?.path });
 
   sendResponse(res, {
     statusCode: 201,

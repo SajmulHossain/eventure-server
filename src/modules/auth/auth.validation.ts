@@ -2,7 +2,8 @@ import z from "zod";
 
 export const userRegisterZodSchema = z.object({
   name: z.string({ error: "Name is required" }),
-  profile_photo: z.string().optional(),
+  profile_photo: z
+    .string({ error: "Profile photo is required" }).optional(),
   bio: z.string({ error: "Bio is required" }),
   interests: z.array(z.string(), { error: "Interests are required" }),
   location: z.string({ error: "Location is required" }),

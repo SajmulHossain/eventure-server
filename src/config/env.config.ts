@@ -18,6 +18,7 @@ interface IEnv {
   cloudinary_api_key: string;
   cloudinary_api_secret: string;
   cloudinary_cloud_name:  string;
+  express_session_secret: string;
 }
 
 const envs = [
@@ -35,7 +36,8 @@ const envs = [
   "JWT_REFRESH_EXPIRY",
   "CLOUDINARY_API_SECRET",
   "CLOUDINARY_CLOUD_NAME",
-  "CLOUDINARY_API_KEY"
+  "CLOUDINARY_API_KEY",
+  "EXPRESS_SESSION_SECRET",
 ];
 
 const loadEnv = (): IEnv => {

@@ -33,7 +33,7 @@ passport.use(
                     return done(null, false, { message: 'Please login using Google.' });
                 }
 
-                const isPasswordMatched = await compare(password, user?.password);
+                const isPasswordMatched = await compare(password, user?.password as string);
 
                 if (!isPasswordMatched) {
                     return done(null, false, { message: 'Incorrect password.' });
