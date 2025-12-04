@@ -2,7 +2,7 @@ import envConfig from "@config/env.config";
 import { ApiError } from "@utils/ApiError";
 import { verifyToken } from "@utils/jwt";
 import { NextFunction, Request, Response } from "express";
-import { User } from "./user/user.model";
+import { User } from "../modules/user/user.model";
 
 export const checkAuth =(...roles: string[]) =>
   async (req: Request, _res: Response, next: NextFunction) => {
