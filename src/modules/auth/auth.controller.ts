@@ -7,6 +7,7 @@ import { sendResponse } from "@utils/sendResponse";
 import { createUserToken } from "@utils/token";
 import passport from "passport";
 import { AuthServices } from "./auth.service";
+import { JwtPayload } from "jsonwebtoken";
 
 const googleCallbackController = catchAsync(async (req, res) => {
   let redirectTo = (req.query.state as string) || "";
@@ -50,9 +51,11 @@ const login = catchAsync(async (req, res, next) => {
   })(req, res, next);
 });
 
-
 const register = catchAsync(async (req, res) => {
-  const data = await AuthServices.register({...req.body, profile_photo: req.file?.path });
+  const data = await AuthServices.register({
+    ...req.body,
+    profile_photo: req.file?.path,
+  });
 
   sendResponse(res, {
     statusCode: 201,
@@ -61,8 +64,32 @@ const register = catchAsync(async (req, res) => {
   });
 });
 
+const changePassword = catchAsync(async (req, res) => {
+  const user = req.user as JwtPayload;
+  const data = await AuthServices.changePassword(user?.id, req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    data,
+    message: "Password changed successfully",
+  });
+});
+
+const updateProfile = catchAsync(async (req, res) => {
+  const user = req.user as JwtPayload;
+  const data = await AuthServices.updateProfile(user?.id, req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    data,
+    message: "Profile updated successfully",
+  });
+});
+
 export const AuthController = {
   googleCallbackController,
   login,
-    register,
+  register,
+  changePassword,
+  updateProfile,
 };

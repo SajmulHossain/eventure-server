@@ -1,7 +1,7 @@
 import { IUser } from "@modules/user/user.interface";
 import { User } from "@modules/user/user.model";
 import { ApiError } from "@utils/ApiError";
-import { hashPassword, hashPassword } from "@utils/hashPassword";
+import { hashPassword } from "@utils/hashPassword";
 import { compare } from "bcryptjs";
 
 const register = async ({ email, password, ...rest }: Partial<IUser>) => {
