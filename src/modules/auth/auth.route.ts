@@ -15,6 +15,8 @@ import { UserRoles } from "@modules/user/user.interface";
 
 const router = Router();
 
+router.get("/me", checkAuth(...Object.values(UserRoles)), AuthController.getMe);
+
 router.get("/google", (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate("google", { scope: ["profile", "email"] })(
     req,

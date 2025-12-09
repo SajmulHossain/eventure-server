@@ -9,6 +9,16 @@ import passport from "passport";
 import { AuthServices } from "./auth.service";
 import { JwtPayload } from "jsonwebtoken";
 
+const getMe = catchAsync(async (req, res) => {
+  const data = await AuthServices.getMe(req.user as JwtPayload);
+
+  sendResponse(res, {
+    message: "User retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
+
 const googleCallbackController = catchAsync(async (req, res) => {
   let redirectTo = (req.query.state as string) || "";
 
@@ -92,4 +102,5 @@ export const AuthController = {
   register,
   changePassword,
   updateProfile,
+  getMe
 };

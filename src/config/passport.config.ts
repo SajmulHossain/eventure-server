@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserRoles } from "@modules/user/user.interface";
 import { User } from "@modules/user/user.model";
+import { compare } from "bcryptjs";
 import passport from "passport";
 import {
-    Strategy as GoogleStrategy,
-    Profile,
-    VerifyCallback,
+  Strategy as GoogleStrategy,
+  Profile,
+  VerifyCallback,
 } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from 'passport-local';
 import envConfig from "./env.config";
-import { compare } from "bcryptjs";
 
 passport.use(
     new LocalStrategy(

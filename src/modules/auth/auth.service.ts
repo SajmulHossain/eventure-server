@@ -3,6 +3,20 @@ import { User } from "@modules/user/user.model";
 import { ApiError } from "@utils/ApiError";
 import { hashPassword } from "@utils/hashPassword";
 import { compare } from "bcryptjs";
+import { JwtPayload } from "jsonwebtoken";
+
+const getMe = async (userInfo: JwtPayload) => {
+  const { email } = userInfo;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(404, "User Not found!");
+  }
+
+  user.password = undefined;
+
+  return user;
+};
 
 const register = async ({ email, password, ...rest }: Partial<IUser>) => {
   const isUserExist = await User.findOne({ email });
@@ -39,7 +53,10 @@ const updateProfile = async (userId: string, updateData: Partial<IUser>) => {
   return user;
 };
 
-const changePassword = async (userId: string, password:{oldPassword: string, newPassword: string }) => {
+const changePassword = async (
+  userId: string,
+  password: { oldPassword: string; newPassword: string }
+) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(404, "User not found");
@@ -56,10 +73,11 @@ const changePassword = async (userId: string, password:{oldPassword: string, new
   await user.save();
   user.password = undefined;
   return user;
-}
+};
 
 export const AuthServices = {
-    register,
-    updateProfile,
-    changePassword,
-}
+  register,
+  updateProfile,
+  changePassword,
+  getMe,
+};
