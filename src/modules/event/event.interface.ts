@@ -9,12 +9,14 @@ export interface IEvent {
   image_url?: string;
   joinning_fee: number;
   status: EventStatus;
-  type: ObjectId
+  type: ObjectId;
+  host_id: ObjectId;
+  joinedParticipants: number;
 }
 
 export enum EventStatus {
-    OPEN="OPEN",
-    FULL="FULL",
-    CANCELLED="CANCELLED",
-    COMPLETED="COMPLETED"
+  OPEN = "OPEN",
+  FULL = "FULL",
+  CANCELLED = "CANCELLED",
+  COMPLETED = "COMPLETED",
 }

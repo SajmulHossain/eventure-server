@@ -3,6 +3,7 @@ import { UserControllers } from "./user.controller";
 
 const router = Router();
 
-router.get("", UserControllers.getAllUsers)
+router.get("", UserControllers.getAllUsers);
+router.get("/:id", UserControllers.getSingleUser);
 
 export const UserRoutes = router;

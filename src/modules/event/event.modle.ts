@@ -41,6 +41,15 @@ const eventModel = new Schema<IEvent>(
       ref: "EventType",
       required: true,
     },
+    host_id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    joinedParticipants: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
