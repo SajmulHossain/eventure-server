@@ -1,5 +1,6 @@
 import { AuthRoutes } from "@modules/auth/auth.route";
 import { EventRoutes } from "@modules/event/event.route";
+import { EventTypeRoutes } from "@modules/EventType/event.route";
 import { UserRoutes } from "@modules/user/user.route";
 import { Router } from "express";
 
@@ -19,8 +20,12 @@ const routes: {
   },
   {
     path: "/events",
-    route: EventRoutes
-  }
+    route: EventRoutes,
+  },
+  {
+    path: "/event-types",
+    route: EventTypeRoutes,
+  },
 ];
 
 routes.forEach((route) => {
