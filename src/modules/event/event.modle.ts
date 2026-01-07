@@ -47,8 +47,9 @@ const eventModel = new Schema<IEvent>(
       required: true,
     },
     joinedParticipants: {
-      type: Number,
-      default: 0,
+      type: [Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
     },
   },
   {

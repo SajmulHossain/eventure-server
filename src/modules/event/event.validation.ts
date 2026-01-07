@@ -22,5 +22,4 @@ export const eventCreateZodSchema = z.object({
     .default(EventStatus.OPEN),
   type: z.string({ error: "Type is required" }),
   host_id: z.string().min(1, { error: "Host id is required" }),
-  joinedParticipants: z.number().optional(),
 });

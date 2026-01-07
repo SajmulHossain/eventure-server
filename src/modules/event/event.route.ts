@@ -17,4 +17,12 @@ router.post(
   EventController.createEvent
 );
 
+router.get("/:id", EventController.getSingleEvent);
+
+router.patch(
+  "/:id/join",
+  checkAuth(UserRoles.USER),
+  EventController.handleJoin
+);
+
 export const EventRoutes = router;

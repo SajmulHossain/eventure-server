@@ -11,7 +11,7 @@ export interface IEvent {
   status: EventStatus;
   type: ObjectId;
   host_id: ObjectId;
-  joinedParticipants: number;
+  joinedParticipants: ObjectId[];
 }
 
 export enum EventStatus {
