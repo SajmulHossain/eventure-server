@@ -23,6 +23,13 @@ const createSave = async (user_id: string, event_id: string) => {
     return await SavedEvent.create(data);
 };
 
+const isSaved = async(user_id: string, event_id: string) => {
+    const isExist = await SavedEvent.findOne({ user_id, event_id });
+
+    return !!isExist;
+}
+
 export const SavedEventServices = {
   createSave,
+  isSaved,
 };
