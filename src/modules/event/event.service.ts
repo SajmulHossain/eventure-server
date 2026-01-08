@@ -9,7 +9,7 @@ const createEvent = async (palyload: IEvent) => {
 
 const getAllEvents = async (query: Record<string, string>) => {
   const queryBuilder = new QueryBuilder(
-    Event.find().populate("host_id"),
+    Event.find().populate("host_id type"),
     query
   );
 
@@ -65,7 +65,7 @@ const handleJoin = async (eventId: string, userId: string) => {
 };
 
 const getSingleEvent = async (id: string) => {
-  const event = await Event.findById(id).populate("host_id");
+  const event = await Event.findById(id).populate("host_id type");
 
   if (!event) {
     throw new ApiError(404, "Event not found!");
