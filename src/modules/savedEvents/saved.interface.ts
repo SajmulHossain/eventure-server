@@ -1,6 +1,6 @@
-import { ObjectId } from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 
 export interface ISavedEvent {
-    user_id: ObjectId;
-    event_id: Object;
+    user_id: mongoose.Types.ObjectId;
+    event_id: mongoose.Types.ObjectId;
 }
