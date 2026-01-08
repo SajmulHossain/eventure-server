@@ -11,7 +11,7 @@ const router = Router();
 router.get("", EventController.getAllEvents);
 router.post(
   "",
-  checkAuth(UserRoles.HOST),
+  checkAuth(UserRoles.HOST, UserRoles.ADMIN),
   multerUpload.single("file"),
   validateRequest(eventCreateZodSchema),
   EventController.createEvent
