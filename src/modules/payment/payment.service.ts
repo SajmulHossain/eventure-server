@@ -5,13 +5,12 @@ import { SSLService } from "@modules/SSLCommerz/sslCommerz.service";
 import { User } from "@modules/user/user.model";
 import { getTransactionId } from "@utils/getTransactionId";
 import { PAYMET_STATUS } from "./payment.interface";
+import mongoose from "mongoose";
 
 const initPayment = async (id: string, userId: string) => {
   const transactionId = getTransactionId();
   const event = await Event.findById(id);
   const user = await User.findById(userId);
-
-  const availableSeats = event?.required_participants! - event?.joinedParticipants?.length! || 0;
 
   await Payment.create({
     event: event?._id,
@@ -25,10 +24,10 @@ const initPayment = async (id: string, userId: string) => {
   }
 
   if (!event) {
-    throw new ApiError(404, "Booking not found");
+    throw new ApiError(404, "Event not found");
   }
 
-  if(event.required_participants >= (event.joinedParticipants.length || 0)){
+  if(event.required_participants <= (event.joinedParticipants.length || 0)){
     throw new ApiError(400, "Not seats available");
   }
 
@@ -62,7 +61,7 @@ const successPayment = async (query: Record<string, string>) => {
 
     await Event.findOneAndUpdate(
       { _id: updatedPayment.event },
-      { joinedParticipants: { $push: updatedPayment.user } },
+      { $push: { joinedParticipants: updatedPayment.user } },
       { session, runValidators: true }
     );
 

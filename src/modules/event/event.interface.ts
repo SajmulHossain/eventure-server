@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 export interface IEvent {
   name: string;
@@ -11,7 +11,7 @@ export interface IEvent {
   status: EventStatus;
   type: ObjectId;
   host_id: ObjectId;
-  joinedParticipants: ObjectId[];
+  joinedParticipants: Types.ObjectId[];
 }
 
 export enum EventStatus {

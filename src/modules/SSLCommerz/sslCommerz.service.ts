@@ -8,15 +8,15 @@ import { ApiError } from "@utils/ApiError";
 const sslPaymentInit = async (payload: ISSLCommerz) => {
   try {
     const data = {
-      store_id: envConfig.SSL_STORE_ID,
-      store_passwd: envConfig.SSL_STORE_PASS,
+      store_id: envConfig.ssl_store_id,
+      store_passwd: envConfig.ssl_store_pass,
       total_amount: payload.amount,
       currency: "BDT",
       tran_id: payload.transactionId,
-      success_url: `${envConfig.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=success`,
-      fail_url: `${envConfig.SSL_FAIL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=fail`,
-      cancel_url: `${envConfig.SSL_CANCEL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=cancel`,
-      ipn_url: envConfig.SSL_IPN_URL,
+      success_url: `${envConfig.ssl_success_backend_url}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=success`,
+      fail_url: `${envConfig.ssl_fail_backend_url}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=fail`,
+      cancel_url: `${envConfig.ssl_cancel_backend_url}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=cancel`,
+      ipn_url: envConfig.ssl_ipn_url,
       shipping_method: "N/A",
       product_name: "Tour",
       product_category: "Service",
@@ -42,14 +42,14 @@ const sslPaymentInit = async (payload: ISSLCommerz) => {
 
     const response = await axios({
       method: "POST",
-      url: envConfig.SSL_PAYMENT_API,
+      url: envConfig.ssl_payment_api,
       data,
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
 
     return response.data;
   } catch (error: any) {
-    throw new ApiError(400, error.message);
+    throw new ApiError(400, error?.message || "SSL Commerz payment init failed");
   }
 };
 
@@ -57,7 +57,7 @@ const validatePayment = async (payload: any) => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${envConfig.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${envConfig.SSL_STORE_ID}&store_passwd=${envConfig.SSL_STORE_PASS}`,
+      url: `${envConfig.ssl_validation_api}?val_id=${payload.val_id}&store_id=${envConfig.ssl_store_id}&store_passwd=${envConfig.ssl_store_pass}`,
     });
 
     console.log("ssl commerze validated data -->", response.data);

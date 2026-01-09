@@ -7,7 +7,7 @@ import { SSLService } from "@modules/SSLCommerz/sslCommerz.service";
 
 const initPayment = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.user as JwtPayload;
+  const userId = (req.user as JwtPayload).id;
 
   const result = await PaymentService.initPayment(id, userId);
 
@@ -26,7 +26,7 @@ const successPayment = catchAsync(async (req, res) => {
 
   if (result?.success) {
     res.redirect(
-      `${envConfig.SSL_SUCCESS_FRONTEND_URL}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`
+      `${envConfig.ssl_success_frontend_url}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`
     );
   }
 });
@@ -39,7 +39,7 @@ const failPayment = catchAsync(async (req, res) => {
 
   if (!result?.success) {
     res.redirect(
-      `${envConfig.SSL_FAIL_FRONTEND_URL}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`
+      `${envConfig.ssl_fail_frontend_url}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`
     );
   }
 });
@@ -52,7 +52,7 @@ const cancelPayment = catchAsync(async (req, res) => {
 
   if (!result?.success) {
     res.redirect(
-      `${envConfig.SSL_CANCEL_FRONTEND_URL}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`
+      `${envConfig.ssl_cancel_frontend_url}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`
     );
   }
 });

@@ -19,17 +19,17 @@ interface IEnv {
   cloudinary_api_secret: string;
   cloudinary_cloud_name: string;
   express_session_secret: string;
-  SSL_STORE_ID: string;
-  SSL_STORE_PASS: string;
-  SSL_PAYMENT_API: string;
-  SSL_VALIDATION_API: string;
-  SSL_SUCCESS_BACKEND_URL: string;
-  SSL_FAIL_BACKEND_URL: string;
-  SSL_CANCEL_BACKEND_URL: string;
-  SSL_IPN_URL: string;
-  SSL_SUCCESS_FRONTEND_URL: string;
-  SSL_FAIL_FRONTEND_URL: string;
-  SSL_CANCEL_FRONTEND_URL: string;
+  ssl_store_id: string;
+  ssl_store_pass: string;
+  ssl_payment_api: string;
+  ssl_validation_api: string;
+  ssl_success_backend_url: string;
+  ssl_fail_backend_url: string;
+  ssl_cancel_backend_url: string;
+  ssl_ipn_url: string;
+  ssl_success_frontend_url: string;
+  ssl_fail_frontend_url: string;
+  ssl_cancel_frontend_url: string;
 }
 
 const envs = [
