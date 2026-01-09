@@ -11,6 +11,9 @@ const router = Router();
 router.get("", EventController.getAllEvents);
 router.get("/upcoming", checkAuth(...Object.values(UserRoles)), EventController.getUpcomingEvents);
 router.get("/completed", checkAuth(...Object.values(UserRoles)), EventController.getCompletedEvents);
+router.get("/my-events", checkAuth(...Object.values(UserRoles)), EventController.getMyEvents);
+router.get("/hosted", checkAuth(UserRoles.ADMIN, UserRoles.HOST), EventController.getMyEvents);
+
 router.post(
   "",
   checkAuth(UserRoles.HOST, UserRoles.ADMIN),

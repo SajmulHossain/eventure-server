@@ -91,6 +91,27 @@ const getCompletedEvents = catchAsync(async (req, res) => {
   });
 });
 
+const getMyEvents =catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload)?.id;
+  const data = await EventServices.getMyEvents(userId as string);
+ 
+  sendResponse(res, {
+    message: "My events retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
+
+const getHostedEvents =catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload)?.id;
+  const data = await EventServices.getHostedEvents(userId as string);
+ 
+  sendResponse(res, {
+    message: "My events retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
 
 export const EventController = {
   getAllEvents,
@@ -99,4 +120,6 @@ export const EventController = {
   getSingleEvent,
   getUpcomingEvents,
   getCompletedEvents,
+  getMyEvents,
+  getHostedEvents
 };

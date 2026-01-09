@@ -104,11 +104,23 @@ const getCompletedEvents = async (id: string) => {
   return events;
 };
 
+const getMyEvents = async (id: string) => {
+  const events = await Event.find({ joinedParticipants: { $in: [id] } });
+
+  return events;
+};
+
+const getHostedEvents = async (id: string) => {
+  return await Event.find({ host_id: id, status: EventStatus.COMPLETED });
+}
+
 export const EventServices = {
   createEvent,
   getAllEvents,
   handleJoin,
   getSingleEvent,
   getUpcomingEvents,
-  getCompletedEvents,
+  getCompletedEvents, 
+  getMyEvents,
+  getHostedEvents
 };
