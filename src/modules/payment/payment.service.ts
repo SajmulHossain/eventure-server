@@ -15,7 +15,7 @@ const initPayment = async (id: string, userId: string) => {
   const event = await Event.findById(id);
   const user = await User.findById(userId);
 
-  const isAlreadyJoined = event?.joinedParticipants.some(
+  const isAlreadyJoined = event?.joinedParticipants?.some(
     (uid: Types.ObjectId) => uid.toString() === userId
   );
 
@@ -41,11 +41,11 @@ const initPayment = async (id: string, userId: string) => {
   ) {
     throw new ApiError(400, "Cannot join this event");
   }
-  if (event.joinedParticipants.length >= event.required_participants) {
+  if (event.joinedParticipants?.length >= event.required_participants) {
     event.status = EventStatus.FULL;
   }
 
-  if (event.required_participants <= (event.joinedParticipants.length || 0)) {
+  if (event.required_participants <= (event.joinedParticipants?.length || 0)) {
     throw new ApiError(400, "Not seats available");
   }
 

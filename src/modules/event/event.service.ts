@@ -4,6 +4,7 @@ import { Event } from "./event.modle";
 import { ApiError } from "@utils/ApiError";
 import { UserRoles } from "@modules/user/user.interface";
 import { SavedEvent } from "@modules/savedEvents/saved.model";
+import { User } from "@modules/user/user.model";
 
 const createEvent = async (palyload: IEvent) => {
   return await Event.create(palyload);
@@ -114,6 +115,22 @@ const getHostedEvents = async (id: string) => {
   return await Event.find({ host_id: id, status: EventStatus.COMPLETED });
 }
 
+const deleteEvent = async (userId: string ,id: string) => {
+  const event = await Event.findById(id);
+
+  if (!event) {
+    throw new ApiError(404, "Event not found");
+  }
+
+  const user = await User.findById(userId);
+
+  if (user?._id.toString() !== event?.host_id.toString()) {
+    throw new ApiError(400, "You Are not permitted to delete it");
+  }
+
+  return await Event.findByIdAndDelete(id);
+}
+
 export const EventServices = {
   createEvent,
   getAllEvents,
@@ -122,5 +139,6 @@ export const EventServices = {
   getUpcomingEvents,
   getCompletedEvents, 
   getMyEvents,
-  getHostedEvents
+  getHostedEvents,
+  deleteEvent
 };

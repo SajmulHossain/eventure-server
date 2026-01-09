@@ -11,7 +11,7 @@ import cors from 'cors'
 
 const app = express();
 app.use(express.json());
-app.use(cors({credentials: true, origin: ["http://localhost:5000", "https://eventure-opal.vercel.app"]}))
+app.use(cors({credentials: true, origin: ["http://localhost:5000", "https://eventure-eight-sigma.vercel.app"]}))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -32,7 +32,6 @@ app.use("/api/v1", router);
 app.get("/", (_req, res) => {
   res.json({
     message: "Server is running!",
-    env: envConfig.cloudinary_cloud_name
   });
 });
 

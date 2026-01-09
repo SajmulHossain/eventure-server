@@ -22,6 +22,8 @@ router.post(
   EventController.createEvent
 );
 
+router.delete("/:id", checkAuth(UserRoles.ADMIN, UserRoles.ADMIN), EventController.deleteEvent);
+
 router.get("/:id", EventController.getSingleEvent);
 
 router.patch(

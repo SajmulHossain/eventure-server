@@ -113,6 +113,18 @@ const getHostedEvents =catchAsync(async (req, res) => {
   });
 });
 
+const deleteEvent =catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload)?.id;
+  const { id } = req.params;
+  const data = await EventServices.deleteEvent(userId as string, id as string);
+ 
+  sendResponse(res, {
+    message: "My events retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
+
 export const EventController = {
   getAllEvents,
   createEvent,
@@ -121,5 +133,6 @@ export const EventController = {
   getUpcomingEvents,
   getCompletedEvents,
   getMyEvents,
-  getHostedEvents
+  getHostedEvents,
+  deleteEvent
 };
