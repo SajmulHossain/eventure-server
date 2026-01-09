@@ -9,6 +9,8 @@ import { eventCreateZodSchema } from "./event.validation";
 const router = Router();
 
 router.get("", EventController.getAllEvents);
+router.get("/upcoming", checkAuth(...Object.values(UserRoles)), EventController.getUpcomingEvents);
+router.get("/completed", checkAuth(...Object.values(UserRoles)), EventController.getCompletedEvents);
 router.post(
   "",
   checkAuth(UserRoles.HOST, UserRoles.ADMIN),

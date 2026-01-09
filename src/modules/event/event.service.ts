@@ -2,6 +2,7 @@ import { QueryBuilder } from "@utils/QueryBuilder";
 import { IEvent, EventStatus } from "./event.interface";
 import { Event } from "./event.modle";
 import { ApiError } from "@utils/ApiError";
+import { UserRoles } from "@modules/user/user.interface";
 
 const createEvent = async (palyload: IEvent) => {
   return await Event.create(palyload);
@@ -74,9 +75,39 @@ const getSingleEvent = async (id: string) => {
   return event;
 };
 
+const getUpcomingEvents = async (id: string, role: string) => {
+  if (role === UserRoles.USER) {
+    const events = await Event.find({
+      joinedParticipants: { $in: [id] },
+      status: { $in: [EventStatus.OPEN, EventStatus.FULL] },
+    }).populate("type host_id");
+
+    return events;
+  } else if (role === UserRoles.HOST) {
+    const events = await Event.find({
+      host_id: id,
+      status: { $in: [EventStatus.OPEN, EventStatus.FULL] },
+    }).populate("type host_id");
+
+    return events;
+  } else {
+    return []
+  }
+}
+
+const getCompletedEvents = async(id: string) => {
+  const events = await Event.find({
+    host_id: id,
+    status: EventStatus.COMPLETED,
+  }).populate("type host_id");
+  return events;
+}
+
 export const EventServices = {
   createEvent,
   getAllEvents,
   handleJoin,
-  getSingleEvent
+  getSingleEvent,
+  getUpcomingEvents,
+  getCompletedEvents
 };

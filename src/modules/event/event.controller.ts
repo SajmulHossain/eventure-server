@@ -6,7 +6,9 @@ import { ApiError } from "@utils/ApiError";
 import { JwtPayload } from "jsonwebtoken";
 
 const getAllEvents = catchAsync(async (req, res) => {
-  const { data, meta } = await EventServices.getAllEvents(req.query as Record<string, string>);
+  const { data, meta } = await EventServices.getAllEvents(
+    req.query as Record<string, string>
+  );
 
   sendResponse(res, {
     message: "Events retrived successfully",
@@ -40,7 +42,10 @@ const handleJoin = catchAsync(async (req, res) => {
     throw new ApiError(404, "User not found");
   }
 
-  const data = await EventServices.handleJoin(id as string, user._id.toString());
+  const data = await EventServices.handleJoin(
+    id as string,
+    user._id.toString()
+  );
 
   sendResponse(res, {
     message: "Successfully joined the event",
@@ -61,8 +66,36 @@ const getSingleEvent = catchAsync(async (req, res) => {
   });
 });
 
+const getUpcomingEvents = catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload)?.id;
+  const userRole = (req.user as JwtPayload)?.role;
+ 
+  const data = await EventServices.getUpcomingEvents(userId as string, userRole as string);
+
+  sendResponse(res, {
+    message: "Upcoming events retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
+
+const getCompletedEvents = catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload)?.id;
+ 
+  const data = await EventServices.getCompletedEvents(userId as string);
+
+  sendResponse(res, {
+    message: "Completed events retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
+
 export const EventController = {
   getAllEvents,
   createEvent,
-  handleJoin,getSingleEvent
+  handleJoin,
+  getSingleEvent,
+  getUpcomingEvents,
+  getCompletedEvents
 };

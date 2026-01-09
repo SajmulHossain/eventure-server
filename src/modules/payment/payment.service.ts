@@ -6,7 +6,7 @@ import { User } from "@modules/user/user.model";
 import { getTransactionId } from "@utils/getTransactionId";
 import { PAYMET_STATUS } from "./payment.interface";
 import mongoose, { Types } from "mongoose";
-import { IEvent } from "@modules/event/event.interface";
+import { EventStatus, IEvent } from "@modules/event/event.interface";
 import { UserRoles } from "@modules/user/user.interface";
 import { QueryBuilder } from "@utils/QueryBuilder";
 
@@ -23,13 +23,6 @@ const initPayment = async (id: string, userId: string) => {
     throw new ApiError(400, "You have already joined this event");
   }
 
-  await Payment.create({
-    event: event?._id,
-    amount: event?.joinning_fee,
-    user: user?._id,
-    transactionId,
-  });
-
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -38,9 +31,32 @@ const initPayment = async (id: string, userId: string) => {
     throw new ApiError(404, "Event not found");
   }
 
+  if (event.status === EventStatus.FULL) {
+    throw new ApiError(400, "Event is already full");
+  }
+
+  if (
+    event.status === EventStatus.CANCELLED ||
+    event.status === EventStatus.COMPLETED
+  ) {
+    throw new ApiError(400, "Cannot join this event");
+  }
+  if (event.joinedParticipants.length >= event.required_participants) {
+    event.status = EventStatus.FULL;
+  }
+
   if (event.required_participants <= (event.joinedParticipants.length || 0)) {
     throw new ApiError(400, "Not seats available");
   }
+
+  await Payment.create({
+    event: event?._id,
+    amount: event?.joinning_fee,
+    user: user?._id,
+    transactionId,
+  });
+
+  await event.save();
 
   const sslPayment = await SSLService.sslPaymentInit({
     address: user.location as string,
@@ -107,7 +123,11 @@ const cancelPayment = async (query: Record<string, string>) => {
   return { success: false, message: "Payment Cancelled" };
 };
 
-const getAllPaymentsForUser = async (id: string, role: string, query: Record<string, string>) => {
+const getAllPaymentsForUser = async (
+  id: string,
+  role: string,
+  query: Record<string, string>
+) => {
   if (role === UserRoles.USER) {
     const paymentsPromise = Payment.find({ user: id })
       .populate("event")
@@ -117,9 +137,12 @@ const getAllPaymentsForUser = async (id: string, role: string, query: Record<str
 
     const payments = queryBuilder.filter().sort().paginate().search(["status"]);
 
-   const [data, meta] = await Promise.all([payments.build(), payments.getMeta()]);
+    const [data, meta] = await Promise.all([
+      payments.build(),
+      payments.getMeta(),
+    ]);
 
-    return {data, meta};
+    return { data, meta };
   } else if (role === UserRoles.HOST) {
     const hostEvents = await Event.find({ host_id: id }).select("_id");
 
@@ -135,9 +158,12 @@ const getAllPaymentsForUser = async (id: string, role: string, query: Record<str
 
     const payments = queryBuilder.filter().sort().paginate().search(["status"]);
 
-   const [data, meta] = await Promise.all([payments.build(), payments.getMeta()]);
+    const [data, meta] = await Promise.all([
+      payments.build(),
+      payments.getMeta(),
+    ]);
 
-    return {data, meta};
+    return { data, meta };
   } else {
     return {
       data: [],
