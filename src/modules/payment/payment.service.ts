@@ -7,8 +7,18 @@ import { getTransactionId } from "@utils/getTransactionId";
 import { PAYMET_STATUS } from "./payment.interface";
 
 const initPayment = async (id: string, userId: string) => {
+  const transactionId = getTransactionId();
   const event = await Event.findById(id);
   const user = await User.findById(userId);
+
+  const availableSeats = event?.required_participants! - event?.joinedParticipants?.length! || 0;
+
+  await Payment.create({
+    event: event?._id,
+    amount: event?.joinning_fee,
+    user: user?._id,
+    transactionId
+  });
 
   if (!user) {
     throw new ApiError(404, "User not found");
@@ -18,29 +28,53 @@ const initPayment = async (id: string, userId: string) => {
     throw new ApiError(404, "Booking not found");
   }
 
+  if(event.required_participants >= (event.joinedParticipants.length || 0)){
+    throw new ApiError(400, "Not seats available");
+  }
+
   const sslPayment = await SSLService.sslPaymentInit({
     address: user.location as string,
     amount: event.joinning_fee,
     email: user.email as string,
     name: user.name as string,
-    transactionId: getTransactionId(),
+    transactionId,
   });
 
   return sslPayment.GatewayPageURL;
 };
 
 const successPayment = async (query: Record<string, string>) => {
-  const updatedPayment = await Payment.findOneAndUpdate(
-    { transactionId: query.transactionId },
-    { status: PAYMET_STATUS.PAID },
-    { runValidators: true }
-  );
+  const session = await Payment.startSession();
+  session.startTransaction();
 
-  if (!updatedPayment) {
-    throw new ApiError(404, "Payment info not found");
+  try {
+    const updatedPayment = await Payment.findOneAndUpdate(
+      { transactionId: query.transactionId },
+      {
+        status: PAYMET_STATUS.PAID,
+       },
+      { session, runValidators: true }
+    );
+
+    if (!updatedPayment) {
+      throw new ApiError(404, "Payment info not found");
+    }
+
+    await Event.findOneAndUpdate(
+      { _id: updatedPayment.event },
+      { joinedParticipants: { $push: updatedPayment.user } },
+      { session, runValidators: true }
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return { success: true, message: "Payment Completed" };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
   }
-
-  return { success: true, message: "Payment Completed" };
 };
 
 const failPayment = async (query: Record<string, string>) => {

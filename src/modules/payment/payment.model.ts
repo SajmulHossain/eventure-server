@@ -25,6 +25,11 @@ const paymentSchema = new Schema<IPayment>(
     paymentGatwayData: {
       type: Schema.Types.Mixed,
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,

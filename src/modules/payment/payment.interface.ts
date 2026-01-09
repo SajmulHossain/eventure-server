@@ -13,5 +13,6 @@ export interface IPayment {
   amount: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   paymentGatwayData?: any;
+  user: Types.ObjectId;
   status: PAYMET_STATUS;
 }

@@ -7,7 +7,7 @@ import { SSLService } from "@modules/SSLCommerz/sslCommerz.service";
 
 const initPayment = catchAsync(async (req, res) => {
   const { id } = req.params;
-    const { userId } = req.user as JwtPayload;
+  const { userId } = req.user as JwtPayload;
 
   const result = await PaymentService.initPayment(id, userId);
 
