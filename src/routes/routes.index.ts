@@ -1,6 +1,7 @@
 import { AuthRoutes } from "@modules/auth/auth.route";
 import { EventRoutes } from "@modules/event/event.route";
 import { EventTypeRoutes } from "@modules/EventType/event.route";
+import { PaymentRoutes } from "@modules/payment/payment.route";
 import { RatingRoutes } from "@modules/rating/rating.route";
 import { SavedEventRoutes } from "@modules/savedEvents/saved.route";
 import { UserRoutes } from "@modules/user/user.route";
@@ -35,6 +36,10 @@ const routes: {
     {
       path: "/saved-events",
       route: SavedEventRoutes
+    },
+    {
+      path: "/payments",
+      route: PaymentRoutes,
     }
   ];
 
