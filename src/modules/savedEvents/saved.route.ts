@@ -5,7 +5,20 @@ import { SavedEventController } from "./saved.controller";
 
 const router = Router();
 
-router.post("/", checkAuth(...Object.values(UserRoles)), SavedEventController.createSave);
-router.get("/:id", checkAuth(...Object.values(UserRoles)), SavedEventController.isSaved);
+router.post(
+  "/",
+  checkAuth(...Object.values(UserRoles)),
+  SavedEventController.createSave
+);
+router.get(
+  "/",
+  checkAuth(...Object.values(UserRoles)),
+  SavedEventController.getSavedEvents
+);
+router.get(
+  "/:id",
+  checkAuth(...Object.values(UserRoles)),
+  SavedEventController.isSaved
+);
 
 export const SavedEventRoutes = router;

@@ -29,7 +29,15 @@ const isSaved = async(user_id: string, event_id: string) => {
     return !!isExist;
 }
 
+
+const getSavedEvents = async (id: string) => {
+  const events = await SavedEvent.find({ user_id: id }).select("event_id").populate("event_id");
+  const savedEvents = events.map(e => e.event_id);
+  return savedEvents;
+};
+
 export const SavedEventServices = {
   createSave,
   isSaved,
+  getSavedEvents
 };

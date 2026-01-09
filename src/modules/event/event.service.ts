@@ -3,6 +3,7 @@ import { IEvent, EventStatus } from "./event.interface";
 import { Event } from "./event.modle";
 import { ApiError } from "@utils/ApiError";
 import { UserRoles } from "@modules/user/user.interface";
+import { SavedEvent } from "@modules/savedEvents/saved.model";
 
 const createEvent = async (palyload: IEvent) => {
   return await Event.create(palyload);
@@ -91,17 +92,17 @@ const getUpcomingEvents = async (id: string, role: string) => {
 
     return events;
   } else {
-    return []
+    return [];
   }
-}
+};
 
-const getCompletedEvents = async(id: string) => {
+const getCompletedEvents = async (id: string) => {
   const events = await Event.find({
     host_id: id,
     status: EventStatus.COMPLETED,
   }).populate("type host_id");
   return events;
-}
+};
 
 export const EventServices = {
   createEvent,
@@ -109,5 +110,5 @@ export const EventServices = {
   handleJoin,
   getSingleEvent,
   getUpcomingEvents,
-  getCompletedEvents
+  getCompletedEvents,
 };

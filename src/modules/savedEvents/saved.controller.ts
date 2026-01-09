@@ -29,7 +29,21 @@ const isSaved = catchAsync(async (req, res) => {
   });
 });
 
+
+const getSavedEvents = catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload)?.id;
+ 
+  const data = await SavedEventServices.getSavedEvents(userId as string);
+
+  sendResponse(res, {
+    message: "Saved events retrived successfully",
+    statusCode: 200,
+    data,
+  });
+});
+
 export const SavedEventController = {
   createSave,
   isSaved,
+  getSavedEvents
 };

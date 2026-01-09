@@ -91,11 +91,12 @@ const getCompletedEvents = catchAsync(async (req, res) => {
   });
 });
 
+
 export const EventController = {
   getAllEvents,
   createEvent,
   handleJoin,
   getSingleEvent,
   getUpcomingEvents,
-  getCompletedEvents
+  getCompletedEvents,
 };
