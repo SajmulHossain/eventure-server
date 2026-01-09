@@ -11,14 +11,25 @@ interface IEnv {
   google_callback_url: string;
   bcrypt_salt_rounds: string;
   frontend_url: string;
-  jwt_access_secret: string;  
+  jwt_access_secret: string;
   jwt_refresh_secret: string;
   jwt_access_expiry: string;
   jwt_refresh_expiry: string;
   cloudinary_api_key: string;
   cloudinary_api_secret: string;
-  cloudinary_cloud_name:  string;
+  cloudinary_cloud_name: string;
   express_session_secret: string;
+  SSL_STORE_ID: string;
+  SSL_STORE_PASS: string;
+  SSL_PAYMENT_API: string;
+  SSL_VALIDATION_API: string;
+  SSL_SUCCESS_BACKEND_URL: string;
+  SSL_FAIL_BACKEND_URL: string;
+  SSL_CANCEL_BACKEND_URL: string;
+  SSL_IPN_URL: string;
+  SSL_SUCCESS_FRONTEND_URL: string;
+  SSL_FAIL_FRONTEND_URL: string;
+  SSL_CANCEL_FRONTEND_URL: string;
 }
 
 const envs = [
@@ -38,6 +49,17 @@ const envs = [
   "CLOUDINARY_CLOUD_NAME",
   "CLOUDINARY_API_KEY",
   "EXPRESS_SESSION_SECRET",
+  "SSL_STORE_ID",
+  "SSL_STORE_PASS",
+  "SSL_PAYMENT_API",
+  "SSL_VALIDATION_API",
+  "SSL_SUCCESS_BACKEND_URL",
+  "SSL_FAIL_BACKEND_URL",
+  "SSL_CANCEL_BACKEND_URL",
+  "SSL_IPN_URL",
+  "SSL_SUCCESS_FRONTEND_URL",
+  "SSL_FAIL_FRONTEND_URL",
+  "SSL_CANCEL_FRONTEND_URL",
 ];
 
 const loadEnv = (): IEnv => {
@@ -47,10 +69,13 @@ const loadEnv = (): IEnv => {
     }
   });
 
-  return envs.reduce((acc, env) => ({
+  return envs.reduce(
+    (acc, env) => ({
       ...acc,
       [env.toLowerCase()]: process.env[env] as string,
-    }), {} as IEnv);
+    }),
+    {} as IEnv
+  );
 };
 
 export default loadEnv();
