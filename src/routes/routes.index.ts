@@ -2,6 +2,7 @@ import { AuthRoutes } from "@modules/auth/auth.route";
 import { EventRoutes } from "@modules/event/event.route";
 import { EventTypeRoutes } from "@modules/EventType/event.route";
 import { RatingRoutes } from "@modules/rating/rating.route";
+import { SavedEventRoutes } from "@modules/savedEvents/saved.route";
 import { UserRoutes } from "@modules/user/user.route";
 import { Router } from "express";
 
@@ -31,6 +32,10 @@ const routes: {
       path: "/ratings",
       route: RatingRoutes,
     },
+    {
+      path: "/saved-events",
+      route: SavedEventRoutes
+    }
   ];
 
 routes.forEach((route) => {

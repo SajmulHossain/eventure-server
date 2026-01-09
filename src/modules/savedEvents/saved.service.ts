@@ -8,7 +8,7 @@ const createSave = async (user_id: string, event_id: string) => {
     event_id,
     };
     
-    const event = await Event.findById(event_id);
+    const event = await Event.findById({_id: event_id});
 
     if (!event) {
         throw new ApiError(404, "Event not found");
@@ -17,7 +17,7 @@ const createSave = async (user_id: string, event_id: string) => {
     const isExist = await SavedEvent.findOne({ user_id, event_id });
 
     if (isExist) {
-        throw new ApiError(400, "Event already saved");
+        return await SavedEvent.findByIdAndDelete(isExist._id);
     }
 
     return await SavedEvent.create(data);
