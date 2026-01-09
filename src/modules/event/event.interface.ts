@@ -1,4 +1,4 @@
-import { ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 
 export interface IEvent {
   name: string;
@@ -9,8 +9,8 @@ export interface IEvent {
   image_url?: string;
   joinning_fee: number;
   status: EventStatus;
-  type: ObjectId;
-  host_id: ObjectId;
+  type: Types.ObjectId;
+  host_id: Types.ObjectId;
   joinedParticipants: Types.ObjectId[];
 }
 

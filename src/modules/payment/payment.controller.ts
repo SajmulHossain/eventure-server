@@ -4,6 +4,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { sendResponse } from "@utils/sendResponse";
 import envConfig from "@config/env.config";
 import { SSLService } from "@modules/SSLCommerz/sslCommerz.service";
+import { get } from "mongoose";
 
 const initPayment = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -68,10 +69,32 @@ const validatePayment = catchAsync(async (req, res) => {
    });
 });
 
+const getAllPaymentsForUser = catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload).id;
+  const data = await PaymentService.getAllPaymentsForUser(userId);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Payments fetched successfully",
+    data,
+  });
+});
+
+const getAllPaymentsForHost = catchAsync(async (req, res) => {
+  const userId = (req.user as JwtPayload).id;
+  const data = await PaymentService.getAllPaymentsForHost(userId);
+  sendResponse(res, {
+    statusCode: 200,
+    message: "Payments fetched successfully",
+    data,
+  });
+});
+
 export const PaymentController = {
   successPayment,
   failPayment,
   cancelPayment,
   initPayment,
   validatePayment,
+  getAllPaymentsForHost,
+  getAllPaymentsForUser,
 };

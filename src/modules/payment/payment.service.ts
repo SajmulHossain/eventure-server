@@ -5,7 +5,8 @@ import { SSLService } from "@modules/SSLCommerz/sslCommerz.service";
 import { User } from "@modules/user/user.model";
 import { getTransactionId } from "@utils/getTransactionId";
 import { PAYMET_STATUS } from "./payment.interface";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
+import { IEvent } from "@modules/event/event.interface";
 
 const initPayment = async (id: string, userId: string) => {
   const transactionId = getTransactionId();
@@ -16,7 +17,7 @@ const initPayment = async (id: string, userId: string) => {
     event: event?._id,
     amount: event?.joinning_fee,
     user: user?._id,
-    transactionId
+    transactionId,
   });
 
   if (!user) {
@@ -27,7 +28,7 @@ const initPayment = async (id: string, userId: string) => {
     throw new ApiError(404, "Event not found");
   }
 
-  if(event.required_participants <= (event.joinedParticipants.length || 0)){
+  if (event.required_participants <= (event.joinedParticipants.length || 0)) {
     throw new ApiError(400, "Not seats available");
   }
 
@@ -51,7 +52,7 @@ const successPayment = async (query: Record<string, string>) => {
       { transactionId: query.transactionId },
       {
         status: PAYMET_STATUS.PAID,
-       },
+      },
       { session, runValidators: true }
     );
 
@@ -77,23 +78,53 @@ const successPayment = async (query: Record<string, string>) => {
 };
 
 const failPayment = async (query: Record<string, string>) => {
-    const updatedPayment = await Payment.findOneAndUpdate(
-      { transactionId: query.transactionId },
-      { status: PAYMET_STATUS.FAILED },
-      { runValidators: true }
-    );
+  const updatedPayment = await Payment.findOneAndUpdate(
+    { transactionId: query.transactionId },
+    { status: PAYMET_STATUS.FAILED },
+    { runValidators: true }
+  );
 
-    return { success: false, message: "Payment Failed" };
+  return { success: false, message: "Payment Failed" };
 };
 
 const cancelPayment = async (query: Record<string, string>) => {
-    await Payment.findOneAndUpdate(
-      { transactionId: query.transactionId },
-      { status: PAYMET_STATUS.CANCELD },
-      { runValidators: true }
-    );
+  await Payment.findOneAndUpdate(
+    { transactionId: query.transactionId },
+    { status: PAYMET_STATUS.CANCELD },
+    { runValidators: true }
+  );
 
-    return { success: false, message: "Payment Cancelled" };
+  return { success: false, message: "Payment Cancelled" };
+};
+
+const getAllPaymentsForUser = async (id: string) => {
+  const payments = await Payment.find({ user: id })
+    .populate("event")
+    .populate("user");
+
+  if (!payments) {
+    throw new ApiError(404, "Payments not found");
+  }
+
+  return payments;
+};
+
+const getAllPaymentsForHost = async (id: string) => {
+  const hostEvents = await Event.find({ host_id: id }).select("_id");
+
+  const eventIds = hostEvents.map((event) => event._id);
+
+  const payments = await Payment.find({
+    event: { $in: eventIds },
+  })
+    .populate("event")
+    .populate("user");
+
+  if (!payments) {
+    throw new ApiError(404, "No payments found for this host");
+  }
+
+  return payments;
 };
 
 export const PaymentService = {
@@ -101,4 +132,6 @@ export const PaymentService = {
   failPayment,
   cancelPayment,
   initPayment,
+  getAllPaymentsForUser,
+  getAllPaymentsForHost
 };
