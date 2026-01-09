@@ -7,9 +7,11 @@ import expressSession from "express-session";
 import passport from 'passport';
 import router from "./routes/routes.index";
 import envConfig from "@config/env.config";
+import cors from 'cors'
 
 const app = express();
 app.use(express.json());
+app.use(cors({credentials: true, origin: ["http://localhost:5000", "https://eventure-opal.vercel.app"]}))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(
