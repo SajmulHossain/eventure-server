@@ -71,23 +71,18 @@ const validatePayment = catchAsync(async (req, res) => {
 
 const getAllPaymentsForUser = catchAsync(async (req, res) => {
   const userId = (req.user as JwtPayload).id;
-  const data = await PaymentService.getAllPaymentsForUser(userId);
+  const userRole = (req.user as JwtPayload).role;
+
+  const { data, meta } = await PaymentService.getAllPaymentsForUser(userId, userRole, req.query as Record<string, string>);
+  
   sendResponse(res, {
     statusCode: 200,
     message: "Payments fetched successfully",
     data,
+    meta
   });
 });
 
-const getAllPaymentsForHost = catchAsync(async (req, res) => {
-  const userId = (req.user as JwtPayload).id;
-  const data = await PaymentService.getAllPaymentsForHost(userId);
-  sendResponse(res, {
-    statusCode: 200,
-    message: "Payments fetched successfully",
-    data,
-  });
-});
 
 export const PaymentController = {
   successPayment,
@@ -95,6 +90,5 @@ export const PaymentController = {
   cancelPayment,
   initPayment,
   validatePayment,
-  getAllPaymentsForHost,
   getAllPaymentsForUser,
 };

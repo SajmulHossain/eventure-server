@@ -7,11 +7,21 @@ import { getTransactionId } from "@utils/getTransactionId";
 import { PAYMET_STATUS } from "./payment.interface";
 import mongoose, { Types } from "mongoose";
 import { IEvent } from "@modules/event/event.interface";
+import { UserRoles } from "@modules/user/user.interface";
+import { QueryBuilder } from "@utils/QueryBuilder";
 
 const initPayment = async (id: string, userId: string) => {
   const transactionId = getTransactionId();
   const event = await Event.findById(id);
   const user = await User.findById(userId);
+
+  const isAlreadyJoined = event?.joinedParticipants.some(
+    (uid: Types.ObjectId) => uid.toString() === userId
+  );
+
+  if (isAlreadyJoined) {
+    throw new ApiError(400, "You have already joined this event");
+  }
 
   await Payment.create({
     event: event?._id,
@@ -97,34 +107,43 @@ const cancelPayment = async (query: Record<string, string>) => {
   return { success: false, message: "Payment Cancelled" };
 };
 
-const getAllPaymentsForUser = async (id: string) => {
-  const payments = await Payment.find({ user: id })
-    .populate("event")
-    .populate("user");
+const getAllPaymentsForUser = async (id: string, role: string, query: Record<string, string>) => {
+  if (role === UserRoles.USER) {
+    const paymentsPromise = Payment.find({ user: id })
+      .populate("event")
+      .populate("user");
 
-  if (!payments) {
-    throw new ApiError(404, "Payments not found");
+    const queryBuilder = new QueryBuilder(paymentsPromise, query);
+
+    const payments = queryBuilder.filter().sort().paginate().search(["status"]);
+
+   const [data, meta] = await Promise.all([payments.build(), payments.getMeta()]);
+
+    return {data, meta};
+  } else if (role === UserRoles.HOST) {
+    const hostEvents = await Event.find({ host_id: id }).select("_id");
+
+    const eventIds = hostEvents.map((event) => event._id);
+
+    const paymentsPromise = Payment.find({
+      event: { $in: eventIds },
+    })
+      .populate("event")
+      .populate("user");
+
+    const queryBuilder = new QueryBuilder(paymentsPromise, query);
+
+    const payments = queryBuilder.filter().sort().paginate().search(["status"]);
+
+   const [data, meta] = await Promise.all([payments.build(), payments.getMeta()]);
+
+    return {data, meta};
+  } else {
+    return {
+      data: [],
+      meta: { total: 0, page: 0, limit: 0 },
+    };
   }
-
-  return payments;
-};
-
-const getAllPaymentsForHost = async (id: string) => {
-  const hostEvents = await Event.find({ host_id: id }).select("_id");
-
-  const eventIds = hostEvents.map((event) => event._id);
-
-  const payments = await Payment.find({
-    event: { $in: eventIds },
-  })
-    .populate("event")
-    .populate("user");
-
-  if (!payments) {
-    throw new ApiError(404, "No payments found for this host");
-  }
-
-  return payments;
 };
 
 export const PaymentService = {
@@ -133,5 +152,4 @@ export const PaymentService = {
   cancelPayment,
   initPayment,
   getAllPaymentsForUser,
-  getAllPaymentsForHost
 };
